@@ -3,3 +3,4 @@ store/migrations/
 payments/migrations/
 .idea/
 __pycache__
+node_modules/
