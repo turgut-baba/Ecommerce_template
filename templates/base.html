@@ -1,0 +1,47 @@
+{% load static %}
+<html>
+  <head>
+    <!-- Meta info -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} {% endblock %}</title>
+    <!-- Import Stripe js file. -->
+    <script src="https://js.stripe.com/v3/"></script>  <!-- new -->
+    <!-- File links -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/style.css' %}"
+    />
+    <script type="text/javascript" src="{% static 'js/JQuery.js' %}"></script>
+
+    <!-- External links -->
+  </head>
+
+  <body>
+    <header class="header">
+      <a href="{% url 'store:main_page'%}">Logo</a>
+    </header>
+    <div class="container">
+      <!------------------ SIDE LINKS ---------------------->
+
+      <div class="side"></div>
+
+      <!---------------- END OF SIDE BAR ------------------->
+      <!---------------------------------------------------->
+      <main>{% block content %} {% endblock %}</main>
+      <!---------------------------------------------------->
+      <!-- --------------  END OF MAIN   ---------------- -->
+
+      <!-- --------------RIGHT SIDE PANEL---------------- -->
+      <div class="right"></div>
+      <!-- -------------- END OF RIGHT PANEL---------------- -->
+    </div>
+    <div class="footer">
+          <!-- #PRAGMA REGION FOOTER -->
+    </div>
+    <!-- Scripts -->
+    {% block additional_scripts %} {% endblock %}
+  </body>
+</html>
