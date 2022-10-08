@@ -1,0 +1,5 @@
+venv/
+store/migrations/
+payments/migrations/
+.idea/
+__pycache__
