@@ -14,6 +14,11 @@
       type="text/css"
       href="{% static 'css/style.css' %}"
     />
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+      rel="stylesheet"
+    />
     <script type="text/javascript" src="{% static 'js/JQuery.js' %}"></script>
 
     <!-- External links -->
@@ -22,6 +27,12 @@
   <body>
     <header class="header">
       <a href="{% url 'store:main_page'%}">Logo</a>
+
+      <!-- TEST CODE  -->
+      <a href="{% url 'store:cart' %}">
+        <span class="material-icons-sharp">shopping_cart</span>
+      </a>
+      <!-- TEST END  -->
     </header>
     <div class="container">
       <!------------------ SIDE LINKS ---------------------->

@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% load static %}
+
+{% block title %} {{ Title }} | Sepet {% endblock %}
+
+{% block content %}
+<h1>Cart</h1>
+{% block additional_scripts %}
+<script type="text/javascript" src="{% static 'js/anon_cart.js' %}"></script>
+{% endblock %} {% endblock %}

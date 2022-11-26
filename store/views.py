@@ -37,3 +37,8 @@ class ProductView(ListView):
             headers={'Last-Modified': products.publication_date.strftime('%a, %d %b %Y %H:%M:%S GMT')},
         )
         return response
+
+
+def cart_view(request):
+    return render(request, "store/cart.html", settings)
+
