@@ -14,21 +14,21 @@ def packed_context(cont: dict) -> dict:
     context = cont | settings
     return context
 
+class HomeView(ListView):
+    model = Product
+    paginate_by = 10
+    template_name = "Test_site/index.html"
 
-def main_page(request):
-    """
-    featured = Item.objects.order_by('-is_featured')
-    context = {
-        'featured_items': featured
-    }
-    :param request:
-    :return:
-    """
-    return render(request, "store/main_page.html", settings)
+    def get(self, *args, **kwargs):
+        """ item_list = Product.objects.get()
+        context = {
+            'items': item_list[10:]
+        } """
+        return render(self.request, self.template_name, None)
 
 
 class ProductView(ListView):
-    template_name = "store/products.html"
+    template_name = "store/shop-grid.html"
     model = Product
 
     def head(self, *args, **kwargs):
@@ -37,8 +37,3 @@ class ProductView(ListView):
             headers={'Last-Modified': products.publication_date.strftime('%a, %d %b %Y %H:%M:%S GMT')},
         )
         return response
-
-
-def cart_view(request):
-    return render(request, "store/cart.html", settings)
-

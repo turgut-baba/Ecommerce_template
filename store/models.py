@@ -16,16 +16,6 @@ LABEL_CHOICES = (
 )
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
-    one_click_purchasing = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.user.username
-
-
 class Product(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
@@ -34,7 +24,7 @@ class Product(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=1)
     slug = models.SlugField()
     description = models.TextField()
-    image = models.ImageField()
+    image = models.ImageField(upload_to="media/products")
 
     def __str__(self):
         return self.title
@@ -53,6 +43,11 @@ class Product(models.Model):
         return reverse("core:remove-from-cart", kwargs={
             'slug': self.slug
         })
+
+
+class CartItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
 
 
 class Coupon(models.Model):

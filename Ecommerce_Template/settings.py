@@ -24,6 +24,7 @@ DOMAIN = "http://127.0.0.1:8000"
 # Application definition
 
 INSTALLED_APPS = [
+    'core',
     'store',
     'payments',
     'django.contrib.admin',
@@ -117,3 +118,5 @@ STATICFILES_DIRS = [BASE_DIR / 'static']  # new
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "core.Customer"

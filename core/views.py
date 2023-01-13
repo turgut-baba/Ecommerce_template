@@ -15,26 +15,40 @@ from django.views.generic import ListView, DetailView, View
 from store.models import Product
 from payments.models import Order, OrderItem
 
+from django.contrib.auth import authenticate, login
 
-def products(request):
-    context = {
-        'items': Product.objects.all()
-    }
-    return render(request, "products.html", context)
+# ===================================================================================
+# Authentication systems.
+# ===================================================================================
 
 
-class HomeView(ListView):
-    model = Product
-    paginate_by = 10
-    template_name = "store/main_page.html"
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect to a success page.
+            return redirect('home')
+        else:
+            context = {'Error': 'Invalid login!'}
+            return render(request, 'login.html', context)
+    else:
+        # Render the login template
+        return render(request, 'login.html')
 
-    def get(self, *args, **kwargs):
-        item_list = Product.objects.get(user=self.request.user, ordered=False)
-        context = {
-            'items': item_list[10:]
-        }
-        return render(self.request, self.template_name, context)
 
+def register(request):
+    ...
+
+
+def forgot_password(request):
+    ...
+
+# ===================================================================================
+# Order views.
+# ===================================================================================
 
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
@@ -141,3 +155,8 @@ def remove_single_item_from_cart(request, slug):
     else:
         messages.info(request, "You do not have an active order")
         return redirect("core:product", slug=slug)
+
+
+
+def cart_view(request):
+    return render(request, "Test_site/shoping-cart.html")
