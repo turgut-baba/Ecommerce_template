@@ -1,6 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django generated files
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+media/
+
+# Virtual environment
 venv/
-store/migrations/
-payments/migrations/
+env/
+*.venv
+.venv/
+*.env
+
+# Ignore all .env files in the project root directory
+.env
+
+# Ignore local development files
 .idea/
-__pycache__
-node_modules/
+.vscode/
+
+# Ignore Django migrations
+*/migrations/*
+!*/migrations/__init__.py

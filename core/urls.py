@@ -9,6 +9,7 @@ from .views import (
     # AddCouponView,
     # RequestRefundView,
     login_view,
+    register_view,
     cart_view
 )
 
@@ -27,5 +28,6 @@ urlpatterns = [
     # path('request-refund/', RequestRefundView.as_view(), name='request-refund'),
 
     path('login', login_view, name="login"),
+    path('register', register_view, name="register"),
     path('cart', cart_view, name='cart')
 ]

@@ -17,6 +17,9 @@ from payments.models import Order, OrderItem
 
 from django.contrib.auth import authenticate, login
 
+# Can be custom.
+from django.contrib.auth.forms import UserCreationForm
+
 # ===================================================================================
 # Authentication systems.
 # ===================================================================================
@@ -33,14 +36,23 @@ def login_view(request):
             return redirect('home')
         else:
             context = {'Error': 'Invalid login!'}
-            return render(request, 'login.html', context)
+            return render(request, 'Test_site/login.html', context)
     else:
         # Render the login template
-        return render(request, 'login.html')
+        return render(request, 'Test_site/login.html')
 
 
-def register(request):
-    ...
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # log in the user
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'Test_site/register.html', {'form': form})
 
 
 def forgot_password(request):

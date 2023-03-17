@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'core',
     'store',
     'payments',
+    'API',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

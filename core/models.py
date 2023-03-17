@@ -40,8 +40,15 @@ class Worker(models.Model):
 class Admin(models.Model):
     auth_level = AuthLevel.Admin
 
+
 class Owner(models.Model):
     auth_level = AuthLevel.Admin
 
+
 class Programmer(Owner):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
     auth_level = AuthLevel.Programmer
+
+    def __str__(self):
+        return self.user.username + ": PROGRAMMER"
