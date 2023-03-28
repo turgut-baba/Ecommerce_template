@@ -14,17 +14,18 @@ def packed_context(cont: dict) -> dict:
     context = cont | settings
     return context
 
+
 class HomeView(ListView):
     model = Product
     paginate_by = 10
     template_name = "Test_site/index.html"
 
     def get(self, *args, **kwargs):
-        """ item_list = Product.objects.get()
+        item_list = Product.objects.order_by("price")
         context = {
-            'items': item_list[10:]
-        } """
-        return render(self.request, self.template_name, None)
+            'Products': item_list
+        }
+        return render(self.request, self.template_name, context)
 
 
 class ProductView(ListView):
