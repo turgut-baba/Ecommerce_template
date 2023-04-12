@@ -1,13 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.http import HttpResponse
-from .models import Product
+from .models import Product, CATEGORY_CHOICES
 from Ecommerce_Template.settings import STORE_NAME
 
 settings = {
     'Title': STORE_NAME
 }
-
 
 def packed_context(cont: dict) -> dict:
     global settings
@@ -23,7 +22,8 @@ class HomeView(ListView):
     def get(self, *args, **kwargs):
         item_list = Product.objects.order_by("price")
         context = {
-            'Products': item_list
+            'Products': item_list,
+            'Categories': CATEGORY_CHOICES
         }
         return render(self.request, self.template_name, context)
 
