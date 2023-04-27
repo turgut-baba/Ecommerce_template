@@ -457,7 +457,7 @@ ol {
 }
 
 .header__menu ul li .header__menu__dropdown li:hover>a {
-	color: #7fad39;
+	color: var(--neon-blue);
 }
 
 .header__menu ul li .header__menu__dropdown li a {
@@ -478,7 +478,7 @@ ol {
 }
 
 .header__menu ul li:hover>a {
-	color: #7fad39;
+	color: var(--neon-blue);
 }
 
 .header__menu ul li:last-child {
@@ -894,8 +894,8 @@ ol {
 }
 
 .featured__item__pic__hover li:hover a {
-	background: #7fad39;
-	border-color: #7fad39;
+	background: var(--neon-blue);
+	border-color: var(--neon-purple);
 }
 
 .featured__item__pic__hover li:hover a i {
@@ -1330,8 +1330,8 @@ ol {
 }
 
 .product__item__pic__hover li:hover a {
-	background: #7fad39;
-	border-color: #7fad39;
+	background: var(--neon-blue);
+	border-color: var(--neon-purple);
 }
 
 .product__item__pic__hover li:hover a i {
@@ -1529,7 +1529,7 @@ ol {
 }
 
 .filter__option span:hover {
-	color: #7fad39;
+	color: var(--neon-purple);
 }
 
 .product__item {
@@ -1570,8 +1570,8 @@ ol {
 }
 
 .product__item__pic__hover li:hover a {
-	background: #7fad39;
-	border-color: #7fad39;
+	background: var(--neon-blue);
+	border-color: var(--neon-purple);
 }
 
 .product__item__pic__hover li:hover a i {
@@ -1651,8 +1651,8 @@ ol {
 
 .product__pagination a:hover,
 .blog__pagination a:hover {
-	background: #7fad39;
-	border-color: #7fad39;
+	background: var(--neon-blue);
+	border-color: var(--neon-purple);
 	color: #ffffff;
 }
 

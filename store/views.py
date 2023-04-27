@@ -27,11 +27,16 @@ class HomeView(ListView):
         latest1 = Product.objects.order_by("-created_at")[:3]
         latest2 = Product.objects.order_by("-created_at")[3:6]
 
+        rated1 = Product.objects.order_by("-rating")[:3]
+        rated2 = Product.objects.order_by("-rating")[3:6]
+
         context = {
             'Products': item_list,
             'Categories': categories,
             'Latest1': latest1,
-            'Latest2': latest2
+            'Latest2': latest2,
+            'Rating1': rated1,
+            'Rating2': rated2,
         }
         return render(self.request, self.template_name, context)
 
