@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.http import HttpResponse
-from .models import Product, CATEGORY_CHOICES
+from .models import Product, Category
 from Ecommerce_Template.settings import STORE_NAME
 
 settings = {
@@ -14,16 +14,24 @@ def packed_context(cont: dict) -> dict:
     return context
 
 
+
 class HomeView(ListView):
     model = Product
     paginate_by = 10
     template_name = "Test_site/index.html"
 
     def get(self, *args, **kwargs):
-        item_list = Product.objects.order_by("price")
+        item_list = Product.objects.order_by("-price")
+        categories = Category.objects.order_by("-title")
+
+        latest1 = Product.objects.order_by("-created_at")[:3]
+        latest2 = Product.objects.order_by("-created_at")[3:6]
+
         context = {
             'Products': item_list,
-            'Categories': CATEGORY_CHOICES
+            'Categories': categories,
+            'Latest1': latest1,
+            'Latest2': latest2
         }
         return render(self.request, self.template_name, context)
 

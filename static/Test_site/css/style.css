@@ -29,13 +29,17 @@
 /*----------------------------------------*/
 /* Template default CSS
 /*----------------------------------------*/
-
+:root{
+	--neon-purple: #C710AF;
+	--neon-blue: #40A4FF;
+}
 html,
 body {
 	height: 100%;
 	font-family: "Cairo", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased;
+	background-color: #343a40;
 }
 
 h1,
@@ -77,7 +81,7 @@ h6 {
 p {
 	font-size: 16px;
 	font-family: "Cairo", sans-serif;
-	color: #6f6f6f;
+	color: #cdcaca;
 	font-weight: 400;
 	line-height: 26px;
 	margin: 0 0 15px 0;
@@ -129,7 +133,7 @@ ol {
 	right: 0;
 	height: 4px;
 	width: 80px;
-	background: #7fad39;
+	background: var(--neon-blue);
 	content: "";
 	margin: 0 auto;
 }
@@ -167,7 +171,7 @@ ol {
 	color: #ffffff;
 	text-transform: uppercase;
 	font-weight: 700;
-	background: #7fad39;
+	background: var(--neon-purple);
 	letter-spacing: 2px;
 }
 
@@ -178,7 +182,7 @@ ol {
 	text-transform: uppercase;
 	display: inline-block;
 	padding: 13px 30px 12px;
-	background: #7fad39;
+	background: var(--neon-blue);
 	border: none;
 }
 
@@ -249,9 +253,13 @@ ol {
 /*---------------------
   Header
 -----------------------*/
+#logo{
+	width: 120;
+	height: 50;
+}
 
 .header__top {
-	background: #f5f5f5;
+	background: #212529;
 }
 
 .header__top__left {
@@ -260,7 +268,7 @@ ol {
 
 .header__top__left ul li {
 	font-size: 14px;
-	color: #1c1c1c;
+	color: var(--light);
 	display: inline-block;
 	margin-right: 45px;
 	position: relative;
@@ -272,7 +280,7 @@ ol {
 	top: 1px;
 	height: 20px;
 	width: 1px;
-	background: #000000;
+	background: white;
 	opacity: 0.1;
 	content: "";
 }
@@ -315,7 +323,7 @@ ol {
 .header__top__right__social a {
 	font-size: 14px;
 	display: inline-block;
-	color: #1c1c1c;
+	color: whitesmoke;
 	margin-right: 20px;
 }
 
@@ -342,7 +350,7 @@ ol {
 	top: 1px;
 	height: 20px;
 	width: 1px;
-	background: #000000;
+	background: white;
 	opacity: 0.1;
 	content: "";
 }
@@ -353,14 +361,14 @@ ol {
 
 .header__top__right__language div {
 	font-size: 14px;
-	color: #1c1c1c;
+	color: whitesmoke;
 	display: inline-block;
 	margin-right: 4px;
 }
 
 .header__top__right__language span {
 	font-size: 14px;
-	color: #1c1c1c;
+	color: whitesmoke;
 	position: relative;
 	top: 2px;
 }
@@ -400,7 +408,7 @@ ol {
 .header__top__right__auth a {
 	display: block;
 	font-size: 14px;
-	color: #1c1c1c;
+	color: whitesmoke;
 }
 
 .header__top__right__auth a i {
@@ -460,7 +468,7 @@ ol {
 }
 
 .header__menu ul li.active a {
-	color: #7fad39;
+	color: var(--neon-purple);
 }
 
 .header__menu ul li:hover .header__menu__dropdown {
@@ -479,7 +487,7 @@ ol {
 
 .header__menu ul li a {
 	font-size: 14px;
-	color: #252525;
+	color: white;
 	text-transform: uppercase;
 	font-weight: 700;
 	letter-spacing: 2px;
@@ -518,13 +526,13 @@ ol {
 
 .header__cart ul li a i {
 	font-size: 18px;
-	color: #1c1c1c;
+	color: whitesmoke;
 }
 
 .header__cart ul li a span {
 	height: 13px;
 	width: 13px;
-	background: #7fad39;
+	background: var(--neon-blue);
 	font-size: 10px;
 	color: #ffffff;
 	line-height: 13px;
@@ -587,7 +595,7 @@ ol {
 }
 
 .hero__categories__all {
-	background: #7fad39;
+	background: var(--neon-blue);
 	position: relative;
 	padding: 10px 25px 10px 40px;
 	cursor: pointer;
@@ -616,7 +624,7 @@ ol {
 }
 
 .hero__categories ul {
-	border: 1px solid #ebebeb;
+	border: 1px solid #252525;
 	padding-left: 40px;
 	padding-top: 10px;
 	padding-bottom: 12px;
@@ -628,7 +636,7 @@ ol {
 
 .hero__categories ul li a {
 	font-size: 16px;
-	color: #1c1c1c;
+	color: var(--light);
 	line-height: 39px;
 	display: block;
 }
@@ -641,7 +649,7 @@ ol {
 .hero__search__form {
 	width: 610px;
 	height: 50px;
-	border: 1px solid #ebebeb;
+	border: 1px solid #212529;
 	position: relative;
 	float: left;
 }
@@ -650,7 +658,7 @@ ol {
 	width: 30%;
 	float: left;
 	font-size: 16px;
-	color: #1c1c1c;
+	color: var(--light);
 	font-weight: 700;
 	padding-left: 18px;
 	padding-top: 11px;
@@ -679,7 +687,7 @@ ol {
 	border: none;
 	height: 48px;
 	font-size: 16px;
-	color: #b2b2b2;
+	background-color: #111111;
 	padding-left: 20px;
 }
 
@@ -691,6 +699,7 @@ ol {
 	position: absolute;
 	right: 0;
 	top: -1px;
+    right: -1px;
 	height: 50px;
 }
 
@@ -699,11 +708,10 @@ ol {
 }
 
 .hero__search__phone__icon {
-	font-size: 18px;
-	color: #7fad39;
+	font-size: 45px;
+	color: var(--neon-purple);
 	height: 50px;
 	width: 50px;
-	background: #f5f5f5;
 	line-height: 50px;
 	text-align: center;
 	border-radius: 50%;
@@ -738,12 +746,12 @@ ol {
 	text-transform: uppercase;
 	font-weight: 700;
 	letter-spacing: 4px;
-	color: #7fad39;
+	color: var(--neon-purple);
 }
 
 .hero__text h2 {
 	font-size: 46px;
-	color: #252525;
+	color: var(--light);
 	line-height: 52px;
 	font-weight: 700;
 	margin: 10px 0;
@@ -773,12 +781,11 @@ ol {
 
 .categories__item h5 a {
 	font-size: 18px;
-	color: #1c1c1c;
+	color: whitesmoke;
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 2px;
 	padding: 12px 0 10px;
-	background: #ffffff;
 	display: block;
 }
 
@@ -793,12 +800,11 @@ ol {
 	width: 30px;
 	line-height: 70px;
 	text-align: center;
-	border: 1px solid #ebebeb;
+	border: 1px solid #252525;
 	position: absolute;
 	left: -35px;
 	top: 50%;
 	-webkit-transform: translateY(-35px);
-	background: #ffffff;
 }
 
 .categories__slider.owl-carousel .owl-nav button.owl-next {
@@ -840,7 +846,7 @@ ol {
 	bottom: -2px;
 	width: 100%;
 	height: 2px;
-	background: #7fad39;
+	background: var(--neon-purple);
 	content: "";
 	opacity: 0;
 }
@@ -3466,3 +3472,6 @@ ol {
 		font-size: 24px;
 	}
 }
+
+/***** LOGIN PAGE ******/
+

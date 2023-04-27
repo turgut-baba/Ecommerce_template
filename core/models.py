@@ -1,9 +1,11 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
-from store.models import CartItem, Product
+from store.models import CartItem, Product, validate_rating
 from django.contrib.auth.models import AbstractUser
 from enum import IntEnum
+from django.utils.timezone import now
 from django_countries.fields import CountryField
+from decimal import Decimal
 
 ADDRESS_CHOICES = (
     ('B', 'Billing'),
@@ -41,3 +43,17 @@ class Customer(AbstractUser):
 
     def __str__(self):
         return self.user.username
+
+
+class Comment(models.Model):
+    created_at = models.DateTimeField(default=now)
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=Decimal('0.0'), validators=[validate_rating])
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
+    comment = models.CharField(max_length=500)
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='comments')
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.product}'
