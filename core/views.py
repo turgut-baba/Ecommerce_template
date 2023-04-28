@@ -33,7 +33,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             # Redirect to a success page.
-            return redirect('home')
+            return redirect('store:home')
         else:
             context = {'Error': 'Invalid login!'}
             return render(request, 'Test_site/login.html', context)
@@ -49,7 +49,7 @@ def register_view(request):
             user = form.save()
             # log in the user
             login(request, user)
-            return redirect('home')
+            return redirect('store:home')
     else:
         form = UserCreationForm()
     return render(request, 'Test_site/register.html', {'form': form})

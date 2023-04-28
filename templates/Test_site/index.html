@@ -54,7 +54,11 @@
                 </ul>
             </div>
             <div class="header__top__right__auth">
-                <a href="{% url 'core:login' %}"><i class="fa fa-user"></i> Login</a>
+                {% if user.is_authenticated %}
+                    <a href=""><i class="fa fa-user"></i> Hello, {{ user.username }}</a>
+                {% else %}
+                    <a href="{% url 'core:login' %}"><i class="fa fa-user"></i> Login</a>
+                {% endif %}
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
@@ -120,7 +124,11 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
-                                <a href="{% url 'core:login' %}"><i class="fa fa-user"></i> Login</a>
+                                {% if user.is_authenticated %}
+                                    <a href=""><i class="fa fa-user"></i> Hello, {{ user.username }}</a>
+                                {% else %}
+                                    <a href="{% url 'core:login' %}"><i class="fa fa-user"></i> Login</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -376,62 +384,30 @@
                         <h4>Review Products</h4>
                         <div class="latest-product__slider owl-carousel">
                             <div class="latest-prdouct__slider__item">
+                                {% for product in Rating1 %}
                                 <a href="#" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="img/latest-product/lp-1.jpg" alt="">
+                                        <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>$30.00</span>
+                                        <h6>{{product.title}}</h6>
+                                        <span>${{product.price}}</span>
                                     </div>
                                 </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="img/latest-product/lp-2.jpg" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>$30.00</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="img/latest-product/lp-3.jpg" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>$30.00</span>
-                                    </div>
-                                </a>
+                                {% endfor %}
                             </div>
                             <div class="latest-prdouct__slider__item">
+                                {% for product in Rating2 %}
                                 <a href="#" class="latest-product__item">
                                     <div class="latest-product__item__pic">
-                                        <img src="img/latest-product/lp-1.jpg" alt="">
+                                        <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="">
                                     </div>
                                     <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>$30.00</span>
+                                        <h6>{{product.title}}</h6>
+                                        <span>${{product.price}}</span>
                                     </div>
                                 </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="img/latest-product/lp-2.jpg" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>$30.00</span>
-                                    </div>
-                                </a>
-                                <a href="#" class="latest-product__item">
-                                    <div class="latest-product__item__pic">
-                                        <img src="img/latest-product/lp-3.jpg" alt="">
-                                    </div>
-                                    <div class="latest-product__item__text">
-                                        <h6>Crab Pool Security</h6>
-                                        <span>$30.00</span>
-                                    </div>
-                                </a>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>

@@ -31,6 +31,8 @@
                     
         <h2>Register</h2>
         <form id="login-form">
+          {% csrf_token %}
+          {{ form.as_p }}
           <p>
           <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
           </p>

@@ -973,10 +973,9 @@ ol {
 .latest-product__slider.owl-carousel .owl-nav button {
 	height: 30px;
 	width: 30px;
-	background: #F3F6FA;
-	border: 1px solid #e6e6e6;
+	border: 1px solid #252525;
 	font-size: 14px;
-	color: #636363;
+	color: #1c1c1c;
 	margin-right: 10px;
 	line-height: 30px;
 	text-align: center;

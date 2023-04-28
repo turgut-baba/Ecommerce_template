@@ -40,7 +40,6 @@ class Customer(AbstractUser):
 
     desc = models.CharField(max_length=100, unique=False, default="Please enter a description.")
 
-
     def __str__(self):
         return self.user.username
 
