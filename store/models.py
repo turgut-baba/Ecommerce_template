@@ -13,6 +13,34 @@ LABEL_CHOICES = (
     ('D', 'danger')
 )
 
+def get_base_lists(request) -> dict:
+    categories = Category.objects.order_by("-title")
+
+    from payments.models import Order
+
+    cart, created = Order.objects.get_or_create(user=request.user)
+
+    try:
+        all_items = cart.items.all()
+        cart_quant = 0
+
+        for item in all_items:
+            cart_quant += item.quantity
+
+    except AttributeError:
+        cart_quant = 0
+
+    try:
+        fav_quant = request.user.favourites.count()
+    except AttributeError:
+        fav_quant = 0
+
+    return {
+        'Categories': categories,
+        'cart_quant': cart_quant,
+        'fav_quant': fav_quant
+        }
+
 
 def validate_rating(value):
     # Round the value to one decimal place
@@ -60,12 +88,6 @@ class Product(models.Model):
         return reverse("core:remove-from-cart", kwargs={
             'slug': self.slug
         })
-
-
-class CartItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
 
 class Coupon(models.Model):
     code = models.CharField(max_length=15)

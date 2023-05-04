@@ -1,0 +1,77 @@
+{% extends "base.html" %} {% load static %}
+
+{% block title %} Hardware Store {% endblock %}
+
+{% block style %}
+<style>
+    .hero{
+        padding-bottom: 0px;
+    }
+    .hero__categories ul {
+        position: absolute;
+        left: 0;
+        top: 46px;
+        width: calc(100% - 30px);
+        z-index: 9;
+        background: #343a40;
+        margin-left: 15px;
+        border: 1px solid #252525;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5" style="background-color: #212529;">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column p-3 py-5">
+                <span class="font-weight-bold">{{ user.username }}</span>
+                <span class="text-black-50">{{user.email}}</span>
+                <span> </span>
+                <span>Payment methods</span>
+                <div class="d-flex justify-content-between align-items-center experience">
+                <a class="primary-btn" href="{% url 'core:logout'%}">Log out</a>
+            
+                </div><br>
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="input-field form-control" placeholder="first name" value=""></div>
+                    <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="input-field form-control" value="" placeholder="surname"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="input-field form-control" placeholder="enter phone number" value=""></div>
+                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="input-field form-control" placeholder="enter address line 1" value=""></div>
+                    <div class="col-md-12"><label class="labels">Address Line 2</label><input type="text" class="input-field form-control" placeholder="enter address line 2" value=""></div>
+                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" class="input-field form-control" placeholder="enter address line 2" value=""></div>
+                    <div class="col-md-12"><label class="labels">State</label><input type="text" class="input-field form-control" placeholder="enter address line 2" value=""></div>
+                    <div class="col-md-12"><label class="labels">Area</label><input type="text" class="input-field form-control" placeholder="enter address line 2" value=""></div>
+                    <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="input-field form-control" placeholder="enter email id" value=""></div>
+                    <div class="col-md-12"><label class="labels">Education</label><input type="text" class="input-field form-control" placeholder="education" value=""></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="input-field form-control" placeholder="country" value=""></div>
+                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="input-field form-control" value="" placeholder="state"></div>
+                </div>
+                
+                <div class="mt-5 text-center"><a class="primary-btn">Save</a></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <span>Past orders</span>
+                <div class="d-flex justify-content-between align-items-center experience">
+
+                </div><br>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
-from store.models import CartItem, Product, validate_rating
+from store.models import Product, validate_rating
 from django.contrib.auth.models import AbstractUser
 from enum import IntEnum
 from django.utils.timezone import now
@@ -32,7 +32,6 @@ class Customer(AbstractUser):
     address_info = models.OneToOneField(Address, on_delete=models.CASCADE, null=True, blank=True)
     stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
     one_click_purchasing = models.BooleanField(default=False)
-    cart = models.ManyToManyField(CartItem) #on_delete=models.CASCADE)
     favourites = models.ManyToManyField(Product)
 
     USERNAME_FIELD = 'username'

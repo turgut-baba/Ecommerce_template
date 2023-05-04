@@ -30,9 +30,8 @@
       <img id="logo" src="{% static 'img/sample-logo.png' %}" alt="">
                     
         <h2>Register</h2>
-        <form id="login-form">
+        <form id="login-form" method="POST" action="{% url 'core:register' %}">
           {% csrf_token %}
-          {{ form.as_p }}
           <p>
           <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
           </p>
@@ -40,13 +39,13 @@
           <input type="email" id="email" name="email" placeholder="Email Address" required><i class="validation"><span></span><span></span></i>
           </p>
           <p>
-            <input type="password" id="password" name="password" placeholder="Password" required><i class="validation"><span></span><span></span></i>
+            <input type="password" id="password1" name="password1" placeholder="Password" required><i class="validation"><span></span><span></span></i>
           </p>
           <p>
-            <input type="password" id="password-re" name="password-re" placeholder="Password again" required><i class="validation"><span></span><span></span></i>
+            <input type="password" id="password2" name="password2" placeholder="Password again" required><i class="validation"><span></span><span></span></i>
           </p>
           <p>
-          <input type="submit" id="login" value="Login">
+          <input type="submit" id="login" value="Register">
           </p>
         </form>
         <div id="create-account-wrap">
@@ -54,7 +53,6 @@
             Your personal data is not being proccessed other then delivery purposes.
             You can read more in our terms and services page.
           </p>
-          <p>Not a member? <a href="#">Create Account</a><p>
         </div><!--create-account-wrap-->
       </div><!--login-form-wrap-->
 </body>
