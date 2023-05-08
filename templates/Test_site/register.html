@@ -20,32 +20,41 @@
     <link rel="stylesheet" href="{% static 'Test_site/css/jquery-ui.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'Test_site/css/owl.carousel.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'Test_site/css/slicknav.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Test_site/css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'Test_site/css/login-style.css' %}" type="text/css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 </head>
 
 <body>
-    <h2>Register Page</h2><br>    
-    <div class="login">    
-    <form id="login" method="get" action="login.php">    
-        <label><b>User Name     
-        </b>    
-        </label>    
-        <input type="text" name="Uname" id="Uname" placeholder="Username">    
-        <br><br>    
-        <label><b>Password     
-        </b>    
-        </label>    
-        <input type="Password" name="Pass" id="Pass" placeholder="Password">    
-        <br><br>    
-        <input type="button" name="log" id="log" value="Log In Here">       
-        <br><br>    
-        <input type="checkbox" id="check">    
-        <span>Remember me</span>    
-        <br><br>    
-        Forgot <a href="#">Password</a>   
-        <br>
-        <a href="{% url 'core:register'%}">Don't have an account?</a>    
-    </form> 
+    <div id="login-form-wrap">
+      <img id="logo" src="{% static 'img/sample-logo.png' %}" alt="">
+                    
+        <h2>Register</h2>
+        <form id="login-form" method="POST" action="{% url 'core:register' %}">
+          {% csrf_token %}
+          <p>
+          <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
+          </p>
+          <p>
+          <input type="email" id="email" name="email" placeholder="Email Address" required><i class="validation"><span></span><span></span></i>
+          </p>
+          <p>
+            <input type="password" id="password1" name="password1" placeholder="Password" required><i class="validation"><span></span><span></span></i>
+          </p>
+          <p>
+            <input type="password" id="password2" name="password2" placeholder="Password again" required><i class="validation"><span></span><span></span></i>
+          </p>
+          <p>
+          <input type="submit" id="login" value="Register">
+          </p>
+        </form>
+        <div id="create-account-wrap">
+          <p>
+            Your personal data is not being proccessed other then delivery purposes.
+            You can read more in our terms and services page.
+          </p>
+        </div><!--create-account-wrap-->
+      </div><!--login-form-wrap-->
 </body>
 
 </html>

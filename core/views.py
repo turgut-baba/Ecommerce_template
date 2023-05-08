@@ -12,14 +12,14 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
 
-from store.models import Product
+from store.models import Product, get_base_lists
 from payments.models import Order, OrderItem
-
-from django.contrib.auth import authenticate, login
+from .forms import RegistrationForm
+from django.contrib.auth import authenticate, login, logout
 
 # Can be custom.
 from django.contrib.auth.forms import UserCreationForm
-
+from django.core.mail import send_mail
 # ===================================================================================
 # Authentication systems.
 # ===================================================================================
@@ -33,7 +33,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             # Redirect to a success page.
-            return redirect('home')
+            return redirect('store:home')
         else:
             context = {'Error': 'Invalid login!'}
             return render(request, 'Test_site/login.html', context)
@@ -44,51 +44,53 @@ def login_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # log in the user
-            login(request, user)
-            return redirect('home')
+            send_mail(
+                'Welcome to MySite',
+                'Thank you for registering. Your username is {}.'.format(user.username),
+                'turgutbababalim@gmail.com',
+                [user.email],
+                fail_silently=False,
+            )
+            return redirect('store:home')
     else:
-        form = UserCreationForm()
+        form = RegistrationForm()
     return render(request, 'Test_site/register.html', {'form': form})
 
 
 def forgot_password(request):
     ...
 
+
+@login_required
+def profile_view(request):
+    context = get_base_lists(request)
+    return render(request, 'Test_site/profile.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('store:home')
+
 # ===================================================================================
 # Order views.
 # ===================================================================================
-
-class OrderSummaryView(LoginRequiredMixin, View):
-    def get(self, *args, **kwargs):
-        try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            context = {
-                'object': order
-            }
-            return render(self.request, 'order_summary.html', context)
-        except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
-            return redirect("/")
-
-
-class ItemDetailView(DetailView):
-    model = Product
-    template_name = "product.html"
 
 
 @login_required
 def add_to_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
+    
     order_item, created = OrderItem.objects.get_or_create(
         item=item,
         user=request.user,
         ordered=False
     )
+
     order_qs = Order.objects.filter(user=request.user, ordered=False)
+
     if order_qs.exists():
         order = order_qs[0]
         # check if the order item is in the order
@@ -96,18 +98,51 @@ def add_to_cart(request, slug):
             order_item.quantity += 1
             order_item.save()
             messages.info(request, "This item quantity was updated.")
-            return redirect("core:order-summary")
+            return redirect("core:cart")
         else:
             order.items.add(order_item)
             messages.info(request, "This item was added to your cart.")
-            return redirect("core:order-summary")
+            return redirect("core:cart")
     else:
         ordered_date = timezone.now()
         order = Order.objects.create(
             user=request.user, ordered_date=ordered_date)
         order.items.add(order_item)
         messages.info(request, "This item was added to your cart.")
-        return redirect("core:order-summary")
+        return redirect("core:cart")
+
+
+@login_required
+def update_cart(request, slug):
+    item = get_object_or_404(Product, slug=slug)
+    
+    order_item, created = OrderItem.objects.get_or_create(
+        item=item,
+        user=request.user,
+        ordered=False
+    )
+
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item.quantity += 1
+            order_item.save()
+            messages.info(request, "This item quantity was updated.")
+            return redirect("core:cart")
+        else:
+            order.items.add(order_item)
+            messages.info(request, "This item was added to your cart.")
+            return redirect("core:cart")
+    else:
+        ordered_date = timezone.now()
+        order = Order.objects.create(
+            user=request.user, ordered_date=ordered_date)
+        order.items.add(order_item)
+        messages.info(request, "This item was added to your cart.")
+        return redirect("core:cart")
 
 
 @login_required
@@ -129,7 +164,7 @@ def remove_from_cart(request, slug):
             order.items.remove(order_item)
             order_item.delete()
             messages.info(request, "This item was removed from your cart.")
-            return redirect("core:order-summary")
+            return redirect("core:cart")
         else:
             messages.info(request, "This item was not in your cart")
             return redirect("core:product", slug=slug)
@@ -141,10 +176,12 @@ def remove_from_cart(request, slug):
 @login_required
 def remove_single_item_from_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
+
     order_qs = Order.objects.filter(
         user=request.user,
         ordered=False
     )
+
     if order_qs.exists():
         order = order_qs[0]
         # check if the order item is in the order
@@ -171,4 +208,15 @@ def remove_single_item_from_cart(request, slug):
 
 
 def cart_view(request):
-    return render(request, "Test_site/shoping-cart.html")
+    context = get_base_lists(request)
+
+    cart, created = Order.objects.get_or_create(user=request.user)
+
+    if not created:
+        cart_items = cart.items.all()
+        
+        context.update({
+            'CartItems': cart_items
+        })
+
+    return render(request, "Test_site/shoping-cart.html", context)
