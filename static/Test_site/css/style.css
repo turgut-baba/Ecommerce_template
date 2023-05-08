@@ -121,7 +121,7 @@ ol {
 }
 
 .section-title h2 {
-	color: #1c1c1c;
+	color:whitesmoke;
 	font-weight: 700;
 	position: relative;
 }
@@ -998,6 +998,7 @@ ol {
 .latest-product__item__pic {
 	float: left;
 	margin-right: 26px;
+	width: 30%;
 }
 
 .latest-product__item__pic img {
@@ -1093,7 +1094,7 @@ ol {
 }
 
 .sidebar__item h4 {
-	color: #1c1c1c;
+	color: whitesmoke;
 	font-weight: 700;
 	margin-bottom: 25px;
 }
@@ -1104,7 +1105,7 @@ ol {
 
 .sidebar__item ul li a {
 	font-size: 16px;
-	color: #1c1c1c;
+	color: whitesmoke;
 	line-height: 39px;
 	display: block;
 }
@@ -1176,7 +1177,7 @@ ol {
 }
 
 .price-range-wrap .price-range .ui-slider-range.ui-corner-all.ui-widget-header:last-child {
-	background: #dd2222;
+	    background: linear-gradient(to right, var(--neon-blue), var(--neon-purple));
 }
 
 .sidebar__item__color {
@@ -1211,7 +1212,7 @@ ol {
 
 .sidebar__item__color label {
 	font-size: 16px;
-	color: #333333;
+	color: whitesmoke;
 	position: relative;
 	padding-left: 32px;
 	cursor: pointer;
@@ -3506,3 +3507,12 @@ td > a > img{
 td > img:hover {
     cursor: pointer;
   }
+
+.div-to-link{
+    all: unset;
+}
+
+input {
+    color: white;
+    background-color: #111111;
+}

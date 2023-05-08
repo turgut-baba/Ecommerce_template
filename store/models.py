@@ -13,12 +13,14 @@ LABEL_CHOICES = (
     ('D', 'danger')
 )
 
+
 def get_base_lists(request) -> dict:
     categories = Category.objects.order_by("-title")
 
     from payments.models import Order
 
-    cart, created = Order.objects.get_or_create(user=request.user)
+    if request.user.is_authenticated:
+        cart, created = Order.objects.get_or_create(user=request.user)
 
     try:
         all_items = cart.items.all()
@@ -27,7 +29,7 @@ def get_base_lists(request) -> dict:
         for item in all_items:
             cart_quant += item.quantity
 
-    except AttributeError:
+    except (AttributeError, UnboundLocalError) as e:
         cart_quant = 0
 
     try:
@@ -50,7 +52,6 @@ def validate_rating(value):
         raise ValidationError('Rating must be between 0.0 and 5.0 with one decimal place.')
 
 
-
 class Category(models.Model):
     title = models.CharField(max_length=50)
     abbreviation = models.CharField(max_length=3)
@@ -58,6 +59,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.abbreviation
+
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
@@ -70,6 +72,8 @@ class Product(models.Model):
     slug = models.SlugField()
     description = models.TextField()
     image = models.ImageField(upload_to="media/products", default=os.path.join(settings.STATIC_URL, 'img/default/product.png'))
+
+    stripe_product_id = models.CharField(max_length=100, default="NULL")
 
     def __str__(self):
         return self.title
@@ -88,6 +92,7 @@ class Product(models.Model):
         return reverse("core:remove-from-cart", kwargs={
             'slug': self.slug
         })
+
 
 class Coupon(models.Model):
     code = models.CharField(max_length=15)

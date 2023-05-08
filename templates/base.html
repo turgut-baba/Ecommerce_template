@@ -66,7 +66,7 @@
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li class="active"><a href="{% url 'store:home'%}">Home</a></li>
-                <li><a href="./shop-grid.html">Shop</a></li>
+                <li><a href="{% url 'store:products' %}">Shop</a></li>
                 <li><a href="#">Pages</a>
                     <ul class="header__menu__dropdown">
                         <li><a href="./shop-details.html">Shop Details</a></li>
@@ -141,14 +141,14 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="./index.html"><img id="logo" src="{% static 'img/sample-logo.png' %}" alt=""></a>
+                        <a href="{% url 'store:home'%}"><img id="logo" src="{% static 'img/sample-logo.png' %}" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="{% url 'store:home'%}">Home</a></li>
-                            <li><a href="./shop-grid.html">Shop</a></li>
+                            <li><a href="{% url 'store:products' %}">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shop-details.html">Shop Details</a></li>
@@ -196,7 +196,7 @@
                               <span>All departments</span>
                           </div>
                           <ul>
-                            {% for category in Categories%}
+                            {% for category in Categories %}
                                 <li><a href="#">{{category.title}}</a></li>
                             {% endfor %}
                           </ul>
@@ -205,13 +205,13 @@
                   <div class="col-lg-9">
                       <div class="hero__search">
                           <div class="hero__search__form">
-                              <form action="#">
+                              <form method="get" action="{% url 'store:search' %}">
                                   <div class="hero__search__categories">
                                       All Categories
                                       <span class="arrow_carrot-down"></span>
                                   </div>
-                                  <input type="text" placeholder="What do yo u need?">
-                                  <button type="submit" class="site-btn">SEARCH</button>
+                                      <input type="text" name="q" placeholder="What do yo u need?">
+                                      <button type="submit" class="site-btn">SEARCH</button>
                               </form>
                           </div>
                           <div class="hero__search__phone">
@@ -230,7 +230,7 @@
               </div>
           </div>
       </section>
-  <!-- Hero Section End -->
+    <!-- Hero Section End -->
     </header>
       <!------------------ HEADER END ---------------------->
       <!------------------ SIDE LINKS ---------------------->
@@ -256,7 +256,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__about__logo">
-                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                            <a href="{% url 'store:home'%}"><img src="{% static 'img/sample-logo.png' %}" alt=""></a>
                         </div>
                         <ul>
                             <li>Address: 60-49 Road 11378 New York</li>

@@ -47,6 +47,8 @@ class ProductLandingPageView(TemplateView):
 
 
 class CheckoutView(View):
+    template_name = "Test_site/checkout.html"
+
     def get(self, *args, **kwargs):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
