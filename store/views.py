@@ -120,6 +120,7 @@ def filter_product(request):
     # Search for products whose name contains all the words in the search query
     keywords = query.split()
     results = Product.objects.filter(name__icontains=keywords[0])
+
     for keyword in keywords[1:]:
         results = results.filter(name__icontains=keyword)
 

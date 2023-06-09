@@ -1,17 +1,29 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from store.models import Product
-from core.models import Customer, Address
+from core.models import Customer, Address, Device
 
 
 class OrderItem(models.Model):
-    user = models.ForeignKey(Customer,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    device = models.OneToOneField(Device, on_delete=models.SET_NULL, null=True, blank=True)
+
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
+
+    def clean(self):
+        if not self.user and not self.device:
+            raise ValidationError("At least one of 'User' or 'Device' must be set.")
+        elif self.user and self.device:
+            raise ValidationError("Both 'User' and 'Device' cannot be set simultaneously.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def get_total_item_price(self):
         return self.quantity * self.item.price
@@ -40,8 +52,10 @@ class Payment(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(Customer,
-                             on_delete=models.CASCADE)
+
+    user = models.OneToOneField(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    device = models.OneToOneField(Device, on_delete=models.SET_NULL, null=True, blank=True)
+
     ref_code = models.CharField(max_length=20, blank=True, null=True)
     items = models.ManyToManyField(OrderItem)
     start_date = models.DateTimeField(auto_now_add=True)
@@ -69,6 +83,16 @@ class Order(models.Model):
     5. Received
     6. Refunds
     '''
+
+    def clean(self):
+        if not self.user and not self.device:
+            raise ValidationError("At least one of 'User' or 'Device' must be set.")
+        elif self.user and self.device:
+            raise ValidationError("Both 'User' and 'Device' cannot be set simultaneously.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username

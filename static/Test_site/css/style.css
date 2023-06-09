@@ -3516,3 +3516,16 @@ input {
     color: white;
     background-color: #111111;
 }
+
+.profile-title{
+    color: whitesmoke;
+}
+
+#minamount{
+    background-color: transparent;
+}
+
+
+#maxamount{
+    background-color: transparent;
+}

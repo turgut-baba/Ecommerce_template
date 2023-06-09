@@ -19,4 +19,5 @@ with open('aspects.json') as json_file:
 		settings.writelines(read_data)
 
 
-
+for i in range(2):
+	print("Hi")

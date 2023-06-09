@@ -67,6 +67,8 @@ def forgot_password(request):
 @login_required
 def profile_view(request):
     context = get_base_lists(request)
+    orders = Order.objects.filter(user=request.user)
+    context.update({"Orders": orders})
     return render(request, 'Test_site/profile.html', context)
 
 
@@ -74,42 +76,59 @@ def logout_view(request):
     logout(request)
     return redirect('store:home')
 
+
+@login_required
+def add_addres_view(request):
+    context = get_base_lists(request)
+    return render(request, 'Test_site/add-address.html', context)
 # ===================================================================================
 # Order views.
 # ===================================================================================
 
 
-@login_required
 def add_to_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    
-    order_item, created = OrderItem.objects.get_or_create(
-        item=item,
-        user=request.user,
-        ordered=False
-    )
 
-    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if request.user.is_authenticated:
+        order_item, created = OrderItem.objects.get_or_create(
+            item=item,
+            user=request.user,
+            ordered=False
+        )
 
-    if order_qs.exists():
-        order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
-            order_item.quantity += 1
-            order_item.save()
-            messages.info(request, "This item quantity was updated.")
-            return redirect("core:cart")
+        order_qs = Order.objects.filter(user=request.user, ordered=False)
+
+        if order_qs.exists():
+            order = order_qs[0]
+            # check if the order item is in the order
+            if order.items.filter(item__slug=item.slug).exists():
+                order_item.quantity += 1
+                order_item.save()
+                messages.info(request, "This item quantity was updated.")
+                return redirect("core:cart")
+            else:
+                order.items.add(order_item)
+                messages.info(request, "This item was added to your cart.")
+                return redirect("core:cart")
         else:
+            ordered_date = timezone.now()
+            order = Order.objects.create(
+                user=request.user, ordered_date=ordered_date)
             order.items.add(order_item)
             messages.info(request, "This item was added to your cart.")
             return redirect("core:cart")
     else:
-        ordered_date = timezone.now()
-        order = Order.objects.create(
-            user=request.user, ordered_date=ordered_date)
-        order.items.add(order_item)
-        messages.info(request, "This item was added to your cart.")
-        return redirect("core:cart")
+        device = request.COOKIES['device']
+        # customer, created = Customer.objects.get_or_create(device=device)
+
+        order_item, created = OrderItem.objects.get_or_create(
+            item=item,
+            device=device,
+            ordered=False
+        )
+
+        order_qs = Order.objects.filter(device=device, ordered=False)
+
 
 
 @login_required

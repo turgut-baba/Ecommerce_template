@@ -60,6 +60,7 @@ class CheckoutView(View):
                 'DISPLAY_COUPON_FORM': True
             }
 
+            """
             shipping_address_qs = Address.objects.filter(
                 user=self.request.user,
                 address_type='S',
@@ -77,7 +78,8 @@ class CheckoutView(View):
             if billing_address_qs.exists():
                 context.update(
                     {'default_billing_address': billing_address_qs[0]})
-            return render(self.request, "checkout.html", context)
+            """
+            return render(self.request, self.template_name, context)
         except ObjectDoesNotExist:
             messages.info(self.request, "You do not have an active order")
             return redirect("core:checkout")

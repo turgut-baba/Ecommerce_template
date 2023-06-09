@@ -13,26 +13,41 @@ ADDRESS_CHOICES = (
 )
 
 
+class Device(models.Model):
+    name = models.CharField(max_length=100)
+    type = models.CharField(max_length=50)
+    os = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
 class Address(models.Model):
-    street_address = models.CharField(max_length=100)
-    apartment_address = models.CharField(max_length=100)
+    title = models.CharField(max_length=20, default="Address")
+    address_long = models.CharField(max_length=500, null=True)
+
+    apartment_no = models.CharField(max_length=100, null=True)
+    apartment_floor = models.CharField(max_length=10, null=True)
+    apartment_flat = models.CharField(max_length=10, null=True)
+
     country = CountryField(multiple=False)
-    zip = models.CharField(max_length=100)
+    zip = models.CharField(max_length=100, null=True)
     address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
     default = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.street_address.name + " " + self.apartment_address.name
+        return self.title.name + ": " + self.address_long.name
 
     class Meta:
         verbose_name_plural = 'Addresses'
 
 
 class Customer(AbstractUser):
-    address_info = models.OneToOneField(Address, on_delete=models.CASCADE, null=True, blank=True)
+    addresses = models.ManyToManyField(Address, null=True, blank=True)
     stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
     one_click_purchasing = models.BooleanField(default=False)
     favourites = models.ManyToManyField(Product)
+    devices = models.ManyToManyField(Device)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -40,7 +55,7 @@ class Customer(AbstractUser):
     desc = models.CharField(max_length=100, unique=False, default="Please enter a description.")
 
     def __str__(self):
-        return self.user.username
+        return self.username
 
 
 class Comment(models.Model):
