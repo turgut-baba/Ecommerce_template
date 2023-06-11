@@ -16,7 +16,7 @@ from store.models import Product, get_base_lists
 from payments.models import Order, OrderItem
 from .forms import RegistrationForm
 from django.contrib.auth import authenticate, login, logout
-
+from .models import Device
 # Can be custom.
 from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import send_mail
@@ -118,16 +118,22 @@ def add_to_cart(request, slug):
             messages.info(request, "This item was added to your cart.")
             return redirect("core:cart")
     else:
-        device = request.COOKIES['device']
+        device_name = request.COOKIES['device']
+
+        device_obj, created = Device.objects.get_or_create(
+            name=device_name
+        )
         # customer, created = Customer.objects.get_or_create(device=device)
 
         order_item, created = OrderItem.objects.get_or_create(
             item=item,
-            device=device,
+            device=device_obj,
             ordered=False
         )
 
-        order_qs = Order.objects.filter(device=device, ordered=False)
+        order_qs = Order.objects.filter(device=device_obj, ordered=False)
+
+        return redirect("core:cart")
 
 
 
@@ -229,7 +235,17 @@ def remove_single_item_from_cart(request, slug):
 def cart_view(request):
     context = get_base_lists(request)
 
-    cart, created = Order.objects.get_or_create(user=request.user)
+    if request.user.is_authenticated:
+        cart, created = Order.objects.get_or_create(user=request.user)
+    else:
+        device_name = request.COOKIES['device']
+        device_obj, created = Device.objects.get_or_create(
+            name=device_name
+        )
+        cart, created = Order.objects.get_or_create(
+            device=device_obj,
+            defaults={'ordered_date': timezone.now()}
+        )
 
     if not created:
         cart_items = cart.items.all()
