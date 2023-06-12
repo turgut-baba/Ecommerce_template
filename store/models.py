@@ -7,6 +7,7 @@ from Ecommerce_Template import settings
 from decimal import Decimal, ROUND_HALF_UP
 from django.core.validators import DecimalValidator
 
+
 LABEL_CHOICES = (
     ('P', 'primary'),
     ('S', 'secondary'),
@@ -15,12 +16,17 @@ LABEL_CHOICES = (
 
 
 def get_base_lists(request) -> dict:
+
+    from core.views import auth_status
+
     categories = Category.objects.order_by("-title")
 
     from payments.models import Order
 
-    if request.user.is_authenticated:
-        cart, created = Order.objects.get_or_create(user=request.user)
+    cart, created = Order.objects.get_or_create(
+            user=auth_status(request),
+            device=auth_status(request, False)
+        )
 
     try:
         all_items = cart.items.all()

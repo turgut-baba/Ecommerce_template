@@ -6,7 +6,7 @@ from core.models import Customer, Address, Device
 
 class OrderItem(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
-    device = models.OneToOneField(Device, on_delete=models.SET_NULL, null=True, blank=True)
+    device = models.ForeignKey(Device, on_delete=models.SET_NULL, null=True, blank=True, db_column='name')
 
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -53,8 +53,8 @@ class Payment(models.Model):
 
 class Order(models.Model):
 
-    user = models.OneToOneField(Customer, on_delete=models.SET_NULL, null=True, blank=True)
-    device = models.OneToOneField(Device, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    device = models.ForeignKey(Device, on_delete=models.SET_NULL, null=True, blank=True)
 
     ref_code = models.CharField(max_length=20, blank=True, null=True)
     items = models.ManyToManyField(OrderItem)

@@ -20,9 +20,24 @@ from .models import Device
 # Can be custom.
 from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import send_mail
+
+
 # ===================================================================================
 # Authentication systems.
 # ===================================================================================
+
+
+def auth_status(request, for_user: bool = True):
+    if request.user.is_authenticated:
+        return None if for_user is False else request.user
+    else:
+        device_name = request.COOKIES['device']
+
+        device_obj, created = Device.objects.get_or_create(
+            name=device_name
+        )
+
+        return None if for_user is True else device_obj
 
 
 def login_view(request):
@@ -81,6 +96,8 @@ def logout_view(request):
 def add_addres_view(request):
     context = get_base_lists(request)
     return render(request, 'Test_site/add-address.html', context)
+
+
 # ===================================================================================
 # Order views.
 # ===================================================================================
@@ -97,26 +114,6 @@ def add_to_cart(request, slug):
         )
 
         order_qs = Order.objects.filter(user=request.user, ordered=False)
-
-        if order_qs.exists():
-            order = order_qs[0]
-            # check if the order item is in the order
-            if order.items.filter(item__slug=item.slug).exists():
-                order_item.quantity += 1
-                order_item.save()
-                messages.info(request, "This item quantity was updated.")
-                return redirect("core:cart")
-            else:
-                order.items.add(order_item)
-                messages.info(request, "This item was added to your cart.")
-                return redirect("core:cart")
-        else:
-            ordered_date = timezone.now()
-            order = Order.objects.create(
-                user=request.user, ordered_date=ordered_date)
-            order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
-            return redirect("core:cart")
     else:
         device_name = request.COOKIES['device']
 
@@ -127,20 +124,42 @@ def add_to_cart(request, slug):
 
         order_item, created = OrderItem.objects.get_or_create(
             item=item,
+            user=None,
             device=device_obj,
             ordered=False
         )
 
-        order_qs = Order.objects.filter(device=device_obj, ordered=False)
+        order_qs = Order.objects.filter(device=device_obj, user=None, ordered=False)
 
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item.quantity += 1
+            order_item.save()
+            messages.info(request, "This item quantity was updated.")
+            return redirect("core:cart")
+        else:
+            order.items.add(order_item)
+            messages.info(request, "This item was added to your cart.")
+            return redirect("core:cart")
+    else:
+        ordered_date = timezone.now()
+        if request.user.is_authenticated:
+            order = Order.objects.create(
+                user=request.user, ordered_date=ordered_date)
+        else:
+            order = Order.objects.create(
+                device=device_obj, ordered_date=ordered_date)
+        order.items.add(order_item)
+        messages.info(request, "This item was added to your cart.")
         return redirect("core:cart")
-
 
 
 @login_required
 def update_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
-    
+
     order_item, created = OrderItem.objects.get_or_create(
         item=item,
         user=request.user,
@@ -170,11 +189,11 @@ def update_cart(request, slug):
         return redirect("core:cart")
 
 
-@login_required
 def remove_from_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
     order_qs = Order.objects.filter(
-        user=request.user,
+        user=auth_status(request),
+        device=auth_status(request, False),
         ordered=False
     )
     if order_qs.exists():
@@ -183,7 +202,8 @@ def remove_from_cart(request, slug):
         if order.items.filter(item__slug=item.slug).exists():
             order_item = OrderItem.objects.filter(
                 item=item,
-                user=request.user,
+                user=auth_status(request),
+                device=auth_status(request, False),
                 ordered=False
             )[0]
             order.items.remove(order_item)
@@ -231,7 +251,6 @@ def remove_single_item_from_cart(request, slug):
         return redirect("core:product", slug=slug)
 
 
-
 def cart_view(request):
     context = get_base_lists(request)
 
@@ -249,7 +268,7 @@ def cart_view(request):
 
     if not created:
         cart_items = cart.items.all()
-        
+
         context.update({
             'CartItems': cart_items
         })
