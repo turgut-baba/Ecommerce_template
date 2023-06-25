@@ -32,5 +32,5 @@ urlpatterns = [
     path('cart', cart_view, name='cart'),
     path('profile', profile_view, name="profile"),
     path('add-address', add_addres_view, name="address"),
-    path('logout', logout_view, name='logout')
+    path('logout', logout_view, name='logout'),
 ]

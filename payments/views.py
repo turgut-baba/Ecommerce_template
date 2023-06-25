@@ -1,7 +1,10 @@
 import json
 import stripe
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.conf import settings
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
@@ -14,6 +17,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Order, Address, Refund
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -46,8 +50,9 @@ class ProductLandingPageView(TemplateView):
         return context
 
 
-class CheckoutView(View):
+class CheckoutView(LoginRequiredMixin, View):
     template_name = "Test_site/checkout.html"
+    login_url = "core:login"
 
     def get(self, *args, **kwargs):
         try:
