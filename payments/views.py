@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.conf import settings
-from django.utils.decorators import method_decorator
+from django.urls import reverse
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
@@ -13,10 +13,12 @@ from store.models import Product
 from Ecommerce_Template.settings import DOMAIN
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
 from django.contrib import messages
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import redirect, get_object_or_404, render
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Order, Address, Refund
+from decimal import Decimal
+from paypal.standard.forms import PayPalPaymentsForm
+from django.views.decorators.csrf import csrf_exempt
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -65,25 +67,11 @@ class CheckoutView(LoginRequiredMixin, View):
                 'DISPLAY_COUPON_FORM': True
             }
 
-            """
-            shipping_address_qs = Address.objects.filter(
-                user=self.request.user,
-                address_type='S',
-                default=True
-            )
-            if shipping_address_qs.exists():
-                context.update(
-                    {'default_shipping_address': shipping_address_qs[0]})
+            address_qs = self.request.user.addresses
 
-            billing_address_qs = Address.objects.filter(
-                user=self.request.user,
-                address_type='B',
-                default=True
-            )
-            if billing_address_qs.exists():
-                context.update(
-                    {'default_billing_address': billing_address_qs[0]})
-            """
+            context.update(
+                    {'Addresses': address_qs})
+
             return render(self.request, self.template_name, context)
         except ObjectDoesNotExist:
             messages.info(self.request, "You do not have an active order")
@@ -256,6 +244,9 @@ class CreateCheckoutSessionView(View):
         })
 
 
+""" ================ STRIPE PAYMENT ================ """
+
+
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
@@ -367,3 +358,62 @@ class RequestRefundView(View):
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order does not exist.")
                 return redirect("core:request-refund")
+
+
+""" ================ PAYPAL PAYMENT ================ """
+
+
+def process_payment(request):
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    host = request.get_host()
+
+    paypal_dict = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': '%.2f' % order.total_cost().quantize(
+            Decimal('.01')),
+        'item_name': 'Order {}'.format(order.id),
+        'invoice': str(order.id),
+        'currency_code': 'USD',
+        'notify_url': 'http://{}{}'.format(host,
+                                           reverse('paypal-ipn')),
+        'return_url': 'http://{}{}'.format(host,
+                                           reverse('payment_done')),
+        'cancel_return': 'http://{}{}'.format(host,
+                                              reverse('payment_cancelled')),
+    }
+
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    return render(request, 'ecommerce_app/process_payment.html', {'order': order, 'form': form})
+
+
+def process_payment(request):
+    ...
+
+
+@csrf_exempt
+def payment_done(request):
+    return render(request, 'ecommerce_app/payment_done.html')
+
+
+@csrf_exempt
+def payment_canceled(request):
+    return render(request, 'ecommerce_app/payment_cancelled.html')
+
+
+def checkout(request):
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+
+            #cart.clear(request)
+
+            #request.session['order_id'] = o.id
+            return redirect('process_payment')
+
+
+    else:
+        form = CheckoutForm()
+        return render(request, 'ecommerce_app/checkout.html', locals())
+

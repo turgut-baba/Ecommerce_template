@@ -11,7 +11,7 @@ from .views import (
     cart_view,
     profile_view,
     logout_view,
-    add_addres_view
+    add_address_view
 )
 
 app_name = 'core'
@@ -31,6 +31,6 @@ urlpatterns = [
     path('register', register_view, name="register"),
     path('cart', cart_view, name='cart'),
     path('profile', profile_view, name="profile"),
-    path('add-address', add_addres_view, name="address"),
+    path('add-address', add_address_view, name="address"),
     path('logout', logout_view, name='logout'),
 ]

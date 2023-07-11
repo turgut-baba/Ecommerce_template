@@ -83,7 +83,9 @@ def forgot_password(request):
 def profile_view(request):
     context = get_base_lists(request)
     orders = Order.objects.filter(user=request.user)
-    context.update({"Orders": orders})
+    addresses = request.user.addresses.all()
+    context.update({"Orders": orders, "Addresses": addresses})
+
     return render(request, 'Test_site/profile.html', context)
 
 
@@ -93,9 +95,12 @@ def logout_view(request):
 
 
 @login_required
-def add_addres_view(request):
-    context = get_base_lists(request)
-    return render(request, 'Test_site/add-address.html', context)
+def add_address_view(request):
+    if request.method == 'POST':
+        return profile_view(request)
+    else:
+        context = get_base_lists(request)
+        return render(request, 'Test_site/add-address.html', context)
 
 
 # ===================================================================================

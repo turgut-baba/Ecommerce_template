@@ -4,3 +4,4 @@ stripe==2.63.0
 Pillow==9.3.0
 djangorestframework==3.14.0
 django-allauth==0.54
+django-paypal==2.0

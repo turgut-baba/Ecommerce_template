@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'paypal.standard.ipn',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -121,11 +123,16 @@ LOGIN_REDIRECT_URL = '/'
 
 # Additional configuration settings
 SOCIALACCOUNT_QUERY_EMAIL = True
-ACCOUNT_LOGOUT_ON_GET= True
+ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 # #=========== =============== ===========# #
 
+# #=========== PAYPAL PAYMENT ===========# #
+PAYPAL_RECEIVER_EMAIL = 'youremail@mail.com'
+
+PAYPAL_TEST = True
+# #=========== =============== ===========# #
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
