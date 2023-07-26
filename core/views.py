@@ -14,9 +14,10 @@ from django.views.generic import ListView, DetailView, View
 
 from store.models import Product, get_base_lists
 from payments.models import Order, OrderItem
-from .forms import RegistrationForm
+from .forms import RegistrationForm, AddressForm
 from django.contrib.auth import authenticate, login, logout
 from .models import Device
+from django_countries.data import COUNTRIES
 # Can be custom.
 from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import send_mail
@@ -97,10 +98,34 @@ def logout_view(request):
 @login_required
 def add_address_view(request):
     if request.method == 'POST':
-        return profile_view(request)
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            print("Valid")
+            address = form.save()
+            user_profile = request.user
+            user_profile.addresses.add(address)
+            user_profile.save()
+
+            return redirect('core:profile')  # Redirect to the user's profile page
+        else:
+            messages.error(request, "Error")
     else:
-        context = get_base_lists(request)
-        return render(request, 'Test_site/add-address.html', context)
+        form = AddressForm()
+
+    context = get_base_lists(request)
+    context.update({'form': form, 'countries': COUNTRIES})
+    return render(request, 'Test_site/add-address.html', context)
+
+
+@login_required
+def remove_address_view(request, title):
+    address = request.user.addresses.all()
+
+    for address in address:
+        if address.title == title:
+            request.user.addresses.remove(address)
+
+    return redirect('core:profile')
 
 
 # ===================================================================================

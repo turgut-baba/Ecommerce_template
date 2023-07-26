@@ -11,7 +11,8 @@ from .views import (
     cart_view,
     profile_view,
     logout_view,
-    add_address_view
+    add_address_view,
+    remove_address_view
 )
 
 app_name = 'core'
@@ -33,4 +34,5 @@ urlpatterns = [
     path('profile', profile_view, name="profile"),
     path('add-address', add_address_view, name="address"),
     path('logout', logout_view, name='logout'),
+    path('remove-address/<str:title>/', remove_address_view, name='remove-address'),
 ]

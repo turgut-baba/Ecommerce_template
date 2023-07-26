@@ -46,9 +46,20 @@
                     <h4 class="profile-title text-right">Profile Settings</h4>
                 </div>
 
+                {% for address in user.addresses.all %}
                 <div class="Address-box">
-
+                    <div class="Address-title">
+                        <h5> {{address.title}} </h5> <h5> {{address.country}} </h5>
+                    </div>
+                    <p> {{ address.address_long}}</p>
+                    <p> Floor: {{address.apartment_floor}} - Flat: {{address.apartment_flat}}</p>
+                    <p> Zip: {{address.zip}} - Type: {{address.address_type}} </p>
+                    <div class="Address-title">
+                        <i class='fa fa-edit' style="color: white;"></i>
+                        <a href="{% url 'core:remove-address' title=address.title%}"><i class='fa fa-trash' style="color: white;"></i></a>
+                    </div>
                 </div>
+                {% endfor %}
                 
                 <div class="mt-5 text-center"><a href="{% url 'core:address' %}" class="primary-btn">New address</a></div>
             </div>

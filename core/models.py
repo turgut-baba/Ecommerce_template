@@ -36,7 +36,7 @@ class Address(models.Model):
     default = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.title.name + ": " + self.address_long.name
+        return self.title + ": " + self.address_long
 
     class Meta:
         verbose_name_plural = 'Addresses'

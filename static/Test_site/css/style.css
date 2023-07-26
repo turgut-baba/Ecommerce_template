@@ -3525,7 +3525,29 @@ input {
     background-color: transparent;
 }
 
+.country-select {
+    height: 50px;
+    overflow: scroll;
+ }
+
 
 #maxamount{
     background-color: transparent;
+}
+
+.Address-box{
+    border-image: linear-gradient(rgb(255 46 144), var(--neon-blue)) 30;
+    border-width: 4px;
+    border-style: solid;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.Address-title{
+  display: flex;
+  justify-content: space-between;
+}
+
+.Address-title h5{
+  color: white;
 }
