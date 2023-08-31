@@ -74,7 +74,7 @@
                                         </div>
                                     </td>
                                     <td class="shoping__cart__total">
-                                        $110.00
+                                        ${{cart_item.get_total_item_price}}
                                     </td>
                                     <td class="shoping__cart__item__close">
                                         <a href="{% url 'core:remove-from-cart' slug=cart_item.item.slug %}">
@@ -111,8 +111,9 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>$454.98</span></li>
-                            <li>Total <span>$454.98</span></li>
+                            <li>Subtotal <span>${{Subtotal}}</span></li>
+                            <li>Tax <span>%{{Tax}}</span></li>
+                            <li>Total <span>${{Total}}</span></li>
                         </ul>
                         <a href="{% url 'payments:checkout' %}" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>

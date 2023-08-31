@@ -11,9 +11,6 @@ STORE_NAME = ""
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-38ljay1+&)b=ylv-dq4z6c*qv_f=*pf9iyp=m74qt*$ln_3b+f'
 
-STRIPE_PUBLISHABLE_KEY = '<your test publishable key here>'
-STRIPE_SECRET_KEY = '<your test secret key here>'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -134,6 +131,13 @@ PAYPAL_RECEIVER_EMAIL = 'youremail@mail.com'
 PAYPAL_TEST = True
 # #=========== =============== ===========# #
 
+# #=========== STRIPE PAYMENT ===========# #
+
+STRIPE_PUBLISHABLE_KEY = '<your test publishable key here>'
+STRIPE_SECRET_KEY = '<your test secret key here>'
+
+# #=========== =============== ===========# #
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -164,3 +168,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'turgutbababalim@gmail.com'
 EMAIL_HOST_PASSWORD = '-POKEMON12345'
+
+TAX_AMOUNT = 18

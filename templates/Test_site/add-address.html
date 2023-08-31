@@ -33,11 +33,11 @@
                 <div class="row mt-2">
                     <div class="col-md-6">
                         <label class="labels" for="{{ form.title.name }}" >Title</label>
-                        <input type="text" name="{{ form.title.name }}" id="{{ form.title.name }}" class="input-field form-control" required placeholder="first name" value="">
+                        <input type="text" name="{{ form.title.name }}" id="{{ form.title.name }}" class="input-field form-control" required placeholder="first name" value="{{ edited.title }}">
                     </div>
                     <div class="col-md-6">
                         <label class="labels" for="{{ form.address_type.name }}" >Type</label>
-                        <select name="{{ form.address_type.name }}" id="{{ form.address_type.name }}" type="text" class="input-field form-control" value="" placeholder="surname">
+                        <select name="{{ form.address_type.name }}" id="{{ form.address_type.name }}" type="text" class="input-field form-control" value="{{ edited.address_type }}">
                             <option value="B">Billing</option>
                             <option value="S">Shipping</option>
                         </select>

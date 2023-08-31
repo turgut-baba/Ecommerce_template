@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from django.views import View
-from store.models import Product
+from store.models import Product, get_base_lists
 from Ecommerce_Template.settings import DOMAIN
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
 from django.contrib import messages
@@ -58,19 +58,28 @@ class CheckoutView(LoginRequiredMixin, View):
 
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            form = CheckoutForm()
-            context = {
-                'form': form,
-                'couponform': CouponForm(),
-                'order': order,
-                'DISPLAY_COUPON_FORM': True
-            }
+            context = get_base_lists(self.request)
 
-            address_qs = self.request.user.addresses
+            cart, created = Order.objects.get_or_create(user=self.request.user)
 
-            context.update(
-                    {'Addresses': address_qs})
+            cart_items = cart.items.all()
+
+            context.update({
+                'CartItems': cart_items
+            })
+
+            sub_total = 0
+            for cart_item in cart_items:
+                sub_total += cart_item.get_total_item_price
+
+            total = sub_total + (sub_total * (settings.TAX_AMOUNT / 100))
+
+            context.update({
+                'Subtotal': sub_total,
+                'Total': total,
+                'Tax': settings.TAX_AMOUNT
+            })
+            # address_qs = self.request.user.addresses
 
             return render(self.request, self.template_name, context)
         except ObjectDoesNotExist:
@@ -401,6 +410,7 @@ def payment_canceled(request):
     return render(request, 'ecommerce_app/payment_cancelled.html')
 
 
+@login_required
 def checkout(request):
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
@@ -411,8 +421,6 @@ def checkout(request):
 
             #request.session['order_id'] = o.id
             return redirect('process_payment')
-
-
     else:
         form = CheckoutForm()
         return render(request, 'ecommerce_app/checkout.html', locals())

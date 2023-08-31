@@ -25,6 +25,7 @@ class OrderItem(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    @property
     def get_total_item_price(self):
         return self.quantity * self.item.price
 

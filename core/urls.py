@@ -12,7 +12,8 @@ from .views import (
     profile_view,
     logout_view,
     add_address_view,
-    remove_address_view
+    remove_address_view,
+    edit_address_view
 )
 
 app_name = 'core'
@@ -35,4 +36,5 @@ urlpatterns = [
     path('add-address', add_address_view, name="address"),
     path('logout', logout_view, name='logout'),
     path('remove-address/<str:title>/', remove_address_view, name='remove-address'),
+    path('edit-address/<str:title>/', edit_address_view, name='edit-address'),
 ]

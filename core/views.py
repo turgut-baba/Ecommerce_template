@@ -118,6 +118,24 @@ def add_address_view(request):
 
 
 @login_required
+def edit_address_view(request, title):
+    address = request.user.addresses.get(title=title)
+
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            new_address = form.save()
+            request.user.addresses.remove(address)
+            request.user.addresses.add(new_address)
+            request.user.save()
+            return redirect('core:profile')
+
+    context = get_base_lists(request)
+    context.update({'form': AddressForm(), 'countries': COUNTRIES, 'edited': address})
+    return render(request, 'Test_site/add-address.html', context)
+
+
+@login_required
 def remove_address_view(request, title):
     address = request.user.addresses.all()
 
@@ -126,7 +144,6 @@ def remove_address_view(request, title):
             request.user.addresses.remove(address)
 
     return redirect('core:profile')
-
 
 # ===================================================================================
 # Order views.
@@ -186,7 +203,6 @@ def add_to_cart(request, slug):
         return redirect("core:cart")
 
 
-@login_required
 def update_cart(request, slug):
     item = get_object_or_404(Product, slug=slug)
 
@@ -299,8 +315,18 @@ def cart_view(request):
     if not created:
         cart_items = cart.items.all()
 
+        sub_total = 0
+
+        for cart_item in cart_items:
+            sub_total += cart_item.get_total_item_price
+
+        total = sub_total + (sub_total * (settings.TAX_AMOUNT / 100))
+
         context.update({
-            'CartItems': cart_items
+            'CartItems': cart_items,
+            'Subtotal': sub_total,
+            'Total': total,
+            'Tax': settings.TAX_AMOUNT
         })
 
     return render(request, "Test_site/shoping-cart.html", context)

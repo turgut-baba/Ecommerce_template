@@ -55,7 +55,7 @@
                     <p> Floor: {{address.apartment_floor}} - Flat: {{address.apartment_flat}}</p>
                     <p> Zip: {{address.zip}} - Type: {{address.address_type}} </p>
                     <div class="Address-title">
-                        <i class='fa fa-edit' style="color: white;"></i>
+                        <a href="{% url 'core:edit-address' title=address.title%}"><i class='fa fa-edit' style="color: white;"></i></a>
                         <a href="{% url 'core:remove-address' title=address.title%}"><i class='fa fa-trash' style="color: white;"></i></a>
                     </div>
                 </div>
